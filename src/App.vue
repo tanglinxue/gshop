@@ -1,17 +1,20 @@
 <template>
   <div>
     <router-view></router-view>
-    <footer-guide></footer-guide>
+    <footer-guide v-show="$route.meta.isShowFooter"></footer-guide>
   </div>
 </template>
 
 <script>
 import FooterGuide from '@/components/FooterGuide/FooterGuide.vue'
+
 export default {
-  components: { FooterGuide }
+  components: { FooterGuide },
+  async mounted() {
+    // 通知action异步获取addrss并保存到state
+    this.$store.dispatch('getAddress')
+  }
 }
 </script>
 
-<style>
-
-</style>
+<style></style>
