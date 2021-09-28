@@ -9,6 +9,7 @@
 */
 import axios from 'axios'
 import qs from 'qs'
+import { Indicator } from 'mint-ui'
 const instance = axios.create({
   baseURL: '/api',
   timeout: 20000 // 配置请求超时的时间
@@ -19,6 +20,7 @@ instance.interceptors.request.use(config => {
   console.log('req interceptor')
   console.log(config)
   const data = config.data
+  Indicator.open()
   if (data instanceof Object) {
     // 对请求体参数进行urlencode处理, 而不使用默认的json方式(后台接口不支持)
     config.data = qs.stringify(data)
@@ -29,11 +31,13 @@ instance.interceptors.request.use(config => {
 // 相应拦截器
 instance.interceptors.response.use(
   response => {
+    Indicator.close()
     console.log('res interceptor')
     console.log(response)
     return response.data
   },
   error => {
+    Indicator.close()
     alert('请求出错' + error.message)
     return new Promise(() => {}) // 返回一个pending状态的promise => 中断promise链
   }

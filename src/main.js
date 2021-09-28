@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import Header from '@/components/Header/Header'
-
+import './validate'
 import store from './vuex/store'
 
 import 'lib-flexible'
