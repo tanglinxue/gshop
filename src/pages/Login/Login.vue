@@ -114,11 +114,21 @@
                 <span style="color: red;" v-show="errors.has('captcha')">{{
                   errors.first('captcha')
                 }}</span>
+                <!-- 当前发送是一个跨域的http请求(不是ajax请求), 没有跨域的问题 -->
                 <img
                   class="get_verification"
-                  src="./images/captcha.svg"
+                  src="http://localhost:4000/captcha"
                   alt="captcha"
+                  @click="updateCaptcha"
+                  ref="captcha"
                 />
+
+                <!-- 原本404,利用代理服务器转发请求4000的后台接口 -->
+                <!-- <img
+                  class="get_verification"
+                  src="/api/captcha"
+                  alt="captcha"
+                /> -->
               </section>
             </section>
           </div>
@@ -134,6 +144,7 @@
 </template>
 
 <script>
+import { Toast, MessageBox } from 'mint-ui'
 export default {
   name: 'Login',
   data() {
@@ -155,16 +166,25 @@ export default {
     }
   },
   methods: {
-    sendCode() {
+    async sendCode() {
       // 进行倒计时效果显示
       this.computeTime = 10
       const intervalId = setInterval(() => {
         this.computeTime--
-        if (this.computeTime === 0) {
+        if (this.computeTime <= 0) {
+          this.computeTime = 0
           clearInterval(intervalId)
         }
       }, 1000)
       // 发请求
+      const res = await this.$API.reqSendCode(this.phone)
+      if (res.code === 1) {
+        this.computeTime = 0
+        clearInterval(intervalId)
+        MessageBox('提示', res.msg || '发送失败')
+      } else {
+        Toast('验证码短信已发送')
+      }
     },
     async login() {
       // 1.前端验证
@@ -178,8 +198,36 @@ export default {
       console.log(success)
       // 2.后端验证
       if (success) {
-        alert('发送登录的请求')
+        const { isShowSms, phone, code, name, pwd, captcha } = this
+        let result
+        if (isShowSms) {
+          // 短信登陆
+          result = await this.$API.reqSmsLogin({ phone, code })
+        } else {
+          // 密码登陆
+          result = await this.$API.reqPwdLogin({ name, pwd, captcha })
+          this.updateCaptcha() // 更新图形验证码
+          this.captcha = ''
+        }
+        // 根据请求的结果, 做不同响应处理
+        if (result.code === 0) {
+          // 将user保存到vuex的state
+          const user = result.data
+
+          // 将user和token保存到state,将token保存到local
+          this.$store.dispatch('saveUser', user)
+
+          // 跳转到个人中心
+          this.$router.replace({ path: '/profile' })
+        } else {
+          MessageBox('提示', result.msg)
+        }
       }
+    },
+    // 更新服务器验证码
+    updateCaptcha() {
+      this.$refs.captcha.src =
+        'http://localhost:4000/captcha?time=' + Date.now()
     }
   }
 }

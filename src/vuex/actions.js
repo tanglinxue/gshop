@@ -6,7 +6,9 @@ import { reqAddress, reqCategorys, reqShops } from '@/api'
 import {
   RECEIVE_ADDRESS,
   RECEIVE_CATEGORYS,
-  RECEIVE_SHOPS
+  RECEIVE_SHOPS,
+  RECEIVE_TOKEN,
+  RECEIVE_USER
 } from './mutation-types'
 export default {
   /**
@@ -46,5 +48,19 @@ export default {
       const shops = result.data
       commit(RECEIVE_SHOPS, shops)
     }
+  },
+
+  /**
+   * 保存用户信息
+   */
+  saveUser({ commit }, user) {
+    const token = user._id
+    // 将token保存到local
+    localStorage.setItem('token_key', token)
+    // 将token保存到state
+    commit(RECEIVE_TOKEN, { token })
+    // 将user保存到state
+    delete user._id // 删除user内部的token
+    commit(RECEIVE_USER, { user })
   }
 }
