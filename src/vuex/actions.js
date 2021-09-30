@@ -2,13 +2,15 @@
  * 包含n个用于间接更新状态数据的方法的对象
  * 方法可以包含异步和逻辑处理代码
  */
-import { reqAddress, reqCategorys, reqShops } from '@/api'
+import { reqAddress, reqCategorys, reqShops, reqAutoLogin } from '@/api'
 import {
   RECEIVE_ADDRESS,
   RECEIVE_CATEGORYS,
   RECEIVE_SHOPS,
   RECEIVE_TOKEN,
-  RECEIVE_USER
+  RECEIVE_USER,
+  RESET_TOKEN,
+  RESET_USER
 } from './mutation-types'
 export default {
   /**
@@ -54,13 +56,34 @@ export default {
    * 保存用户信息
    */
   saveUser({ commit }, user) {
-    const token = user._id
+    const token = user.token
     // 将token保存到local
     localStorage.setItem('token_key', token)
     // 将token保存到state
     commit(RECEIVE_TOKEN, { token })
     // 将user保存到state
-    delete user._id // 删除user内部的token
+    delete user.token // 删除user内部的token
     commit(RECEIVE_USER, { user })
+  },
+
+  /**
+   * 自动登录的action
+   */
+  async autoLogin({ commit, state }) {
+    if (state.token && !state.user._id) {
+      // 必须要有token且没有user信息
+      // 发异步ajax请求
+      const result = await reqAutoLogin()
+      // 请求成功后提交Mutation
+      if (result.code === 0) {
+        const user = result.data
+        commit(RECEIVE_USER, { user })
+      }
+    }
+  },
+  logout({ commit }) {
+    localStorage.removeItem('token_key')
+    commit(RESET_TOKEN)
+    commit(RESET_USER)
   }
 }

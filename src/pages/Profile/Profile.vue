@@ -10,10 +10,10 @@
           <i class="iconfont icon-person"></i>
         </div>
         <div class="user-info">
-          <p class="user-info-top" v-if="user.name">
+          <p class="user-info-top" v-if="!user.phone">
             {{ user.name ? user.name : '登录/注册' }}
           </p>
-          <p v-else>
+          <p v-if="!user.name">
             <span class="user-icon">
               <i class="iconfont icon-shouji icon-mobile"></i>
             </span>
@@ -81,28 +81,33 @@
         </div>
       </a>
     </section>
-    <section class="profile_my_order border-1px">
+    <section class="profile_my_order border-1px" v-show="user._id">
       <!-- 服务中心 -->
-      <a href="javascript:" class="my_order">
-        <span>
-          <i class="iconfont icon-fuwu"></i>
-        </span>
-        <div class="my_order_div">
-          <span>服务中心</span>
-          <span class="my_order_icon">
-            <i class="iconfont icon-jiantou1"></i>
-          </span>
-        </div>
-      </a>
+      <mt-button style="width:100%" type="danger" @click="logout"
+        >退出登陆</mt-button
+      >
     </section>
   </section>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import { messageBox } from 'mint-ui'
 export default {
   computed: {
     ...mapState(['user'])
+  },
+  methods: {
+    logout() {
+      messageBox.confirm('确认退出吗?').then(
+        aciton => {
+          this.$store.dispatch('logout')
+        },
+        () => {
+          console.log('点了取消')
+        }
+      )
+    }
   }
 }
 </script>

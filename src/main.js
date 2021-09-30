@@ -5,6 +5,7 @@ import Header from '@/components/Header/Header'
 import Star from '@/components/Star/Star'
 import './validate'
 import store from './vuex/store'
+import { Button } from 'mint-ui'
 import * as API from '@/api'
 
 import 'lib-flexible'
@@ -14,6 +15,7 @@ Vue.prototype.$API = API
 // 注册全局组件
 Vue.component('Header', Header)
 Vue.component('Star', Star)
+Vue.component(Button.name, Button)
 
 new Vue({
   render: h => h(App),

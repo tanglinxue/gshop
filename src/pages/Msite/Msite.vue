@@ -37,7 +37,12 @@
       </div>
       <div class="shop_container">
         <ul class="shop_list" v-if="shops.length">
-          <li class="shop_li border-1px" v-for="shop in shops" :key="shop.id">
+          <li
+            class="shop_li border-1px"
+            v-for="shop in shops"
+            :key="shop.id"
+            @click="$router.push('/shop')"
+          >
             <a>
               <div class="shop_left">
                 <img
