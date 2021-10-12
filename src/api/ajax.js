@@ -29,7 +29,7 @@ instance.interceptors.request.use(config => {
   }
 
   // 请求头携带token数据
-  const token = store.state.token
+  const token = store.state.user.token
 
   if (token) {
     config.headers.Authorization = token
@@ -54,7 +54,6 @@ instance.interceptors.response.use(
   error => {
     // 没发请求的错误
     // 发了请求的错误
-    console.log('配置')
     console.log(error)
     const response = error.response
     const path = router.currentRoute.path
@@ -68,7 +67,6 @@ instance.interceptors.response.use(
         // 如果响应状态码是401，且当前没在登录页面，退出登录，自动跳转到login页面
 
         if (path !== 'login') {
-          console.log('----')
           store.dispatch('logout')
           router.replace('/login')
           Toast(error.response.data.message || '登录失效，请重新登录')

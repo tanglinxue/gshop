@@ -4,6 +4,7 @@ const px2rem = require('postcss-px2rem') // postcss的一个插件
 module.exports = {
   // 只能写vue封装的配置
   runtimeCompiler: true,
+
   // 关闭EsLint的规则
   lintOnSave: false,
 
@@ -29,6 +30,7 @@ module.exports = {
       }
     }
   },
+
   devServer: {
     open: true,
     proxy: {
@@ -40,6 +42,16 @@ module.exports = {
         },
         changeOrigin: true // 支持跨域, 如果协议/主机也不相同, 必须加上
       }
+    }
+  },
+
+  pluginOptions: {
+    i18n: {
+      locale: 'zh_CN',
+      fallbackLocale: 'en',
+      localeDir: 'locales',
+      enableInSFC: false,
+      enableBridge: false
     }
   }
 }

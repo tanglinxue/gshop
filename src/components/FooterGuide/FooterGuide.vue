@@ -8,7 +8,7 @@
       <span>
         <i class="iconfont icon-waimai"></i>
       </span>
-      <span>外卖</span>
+      <span>{{ $t('footer_home') }}</span>
     </span>
     <span
       class="guide_item"
@@ -18,7 +18,7 @@
       <span>
         <i class="iconfont icon-search"></i>
       </span>
-      <span>搜索</span>
+      <span>{{ $t('footer_search') }}</span>
     </span>
     <span
       class="guide_item"
@@ -28,7 +28,7 @@
       <span>
         <i class="iconfont icon-dingdan"></i>
       </span>
-      <span>订单</span>
+      <span>{{ $t('footer_order') }}</span>
     </span>
     <span
       class="guide_item"
@@ -38,7 +38,7 @@
       <span>
         <i class="iconfont icon-geren"></i>
       </span>
-      <span>我的</span>
+      <span>{{ $t('footer_own') }}</span>
     </span>
   </footer>
 </template>

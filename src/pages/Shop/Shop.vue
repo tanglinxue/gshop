@@ -17,8 +17,20 @@
 </template>
 
 <script>
+// ok
 import ShopHeader from '@/components/ShopHeader/ShopHeader.vue'
-export default { components: { ShopHeader } }
+import { mapActions } from 'vuex'
+export default {
+  components: { ShopHeader },
+  mounted() {
+    this.getShopGoods()
+    this.getShopRatings()
+    this.getShopInfo()
+  },
+  methods: {
+    ...mapActions(['getShopGoods', 'getShopRatings', 'getShopInfo'])
+  }
+}
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
