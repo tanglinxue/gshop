@@ -44,11 +44,13 @@ export default [
     component: Login
   },
   {
-    path: '/shop',
+    path: '/shop/:id',
+    props: true, // 将所有params参数转换成标签属性传递给子路由组件
     component: Shop,
+    // props: toRoute => ({ id: toRoute.params.id }),
     children: [
       {
-        path: '/shop/goods',
+        path: 'goods',
         component: Goods
       },
       {
@@ -61,7 +63,7 @@ export default [
       },
       {
         path: '',
-        redirect: '/shop/goods'
+        redirect: 'goods'
       }
     ]
   },

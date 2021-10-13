@@ -3,13 +3,13 @@
     <shop-header></shop-header>
     <div class="tab">
       <div class="tab-item">
-        <router-link to="/shop/goods" replace>点餐</router-link>
+        <router-link :to="`/shop/${id}/goods`" replace>点餐</router-link>
       </div>
       <div class="tab-item">
-        <router-link to="/shop/ratings" replace>评价</router-link>
+        <router-link :to="`/shop/${id}/ratings`" replace>评价</router-link>
       </div>
       <div class="tab-item">
-        <router-link to="/shop/info" replace>商家</router-link>
+        <router-link :to="`/shop/${id}/info`" replace>商家</router-link>
       </div>
     </div>
     <router-view></router-view>
@@ -18,17 +18,34 @@
 
 <script>
 // ok
+import { mapState } from 'vuex'
+import { saveCartFoods } from '@/utils'
 import ShopHeader from '@/components/ShopHeader/ShopHeader.vue'
-import { mapActions } from 'vuex'
 export default {
   components: { ShopHeader },
+  props: ['id'],
   mounted() {
-    this.getShopGoods()
-    this.getShopRatings()
-    this.getShopInfo()
+    // this.getShopGoods()
+    // this.getShopRatings()
+    // this.getShopInfo()
+
+    // 得到当前请求的商家id
+    // const id = this.$route.params.id
+    this.$store.dispatch('getShop', this.id)
   },
-  methods: {
-    ...mapActions(['getShopGoods', 'getShopRatings', 'getShopInfo'])
+  computed: {
+    ...mapState({
+      shop: state => state.shop // {shop,cartFoods:[]}
+    })
+  },
+  // 在退出当前商家界面
+  beforeDestroy() {
+    const {
+      shop: { id },
+      cartFoods
+    } = this.shop
+    // 将当前商家的购物车数据保存
+    saveCartFoods(id, cartFoods)
   }
 }
 </script>

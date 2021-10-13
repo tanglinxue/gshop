@@ -78,10 +78,9 @@ export default {
     Food,
     ShopCart
   },
-  mounted() {},
   computed: {
     ...mapState({
-      goods: state => state.shop.goods
+      goods: state => state.shop.shop.goods || []
     }),
     currentIndex() {
       const { scrollY, tops } = this
@@ -101,8 +100,18 @@ export default {
       return index
     }
   },
+  mounted() {
+    console.log('我来了')
+    // 如果数据已经有了，直接做初始化的操作
+    if (this.goods.length) {
+      console.log('watch goods1')
+      this._initScroll()
+      this._initTops()
+    }
+  },
   watch: {
     goods() {
+      console.log('watch goods')
       this.$nextTick(() => {
         this._initScroll()
         this._initTops()
@@ -111,6 +120,12 @@ export default {
   },
   methods: {
     _initScroll() {
+      if (this.leftScroll) {
+        this.leftScroll.refresh()
+        this.rightScroll.refresh()
+
+        return
+      }
       // eslint-disable-next-line no-new
       this.leftScroll = new BScroll(this.$refs.left, {
         click: true // 分发自定义的click事件

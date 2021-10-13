@@ -202,7 +202,6 @@ export default {
         names = ['name', 'pwd', 'captcha']
       }
       const success = await this.$validator.validateAll(names) // 对指定的所有表单项进行验证
-      console.log(success)
       // 2.后端验证
       if (success) {
         const { isShowSms, phone, code, name, pwd, captcha } = this

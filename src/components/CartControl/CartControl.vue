@@ -23,9 +23,13 @@ export default {
     food: Object
   },
   methods: {
-    UpdateFoodCount: throttle(function(isAdd) {
-      this.$store.dispatch('updateFoodCount', { isAdd, food: this.food })
-    }, 1000)
+    UpdateFoodCount: throttle(
+      function(isAdd) {
+        this.$store.dispatch('updateFoodCount', { isAdd, food: this.food })
+      },
+      1000,
+      { trailing: false } // 在1s内多次点击，只响应第一次点击(默认是响应2次，且第2是在过了1s后才响应)
+    )
   }
 }
 </script>
