@@ -113,6 +113,7 @@ export default {
         // 读取得到当前商家的购物车数据
         const shop = result.data
         const cartFoods = getCartFoods(shop)
+        console.log(cartFoods)
         commit(RECEIVE_SHOP, { shop, cartFoods })
       }
     },

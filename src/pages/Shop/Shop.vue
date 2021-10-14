@@ -32,6 +32,15 @@ export default {
     // 得到当前请求的商家id
     // const id = this.$route.params.id
     this.$store.dispatch('getShop', this.id)
+    // 给窗口绑定一个卸载的监听
+    window.addEventListener('unload', () => {
+      const {
+        shop: { id },
+        cartFoods
+      } = this.shop
+      // 将当前商家的购物车数据保存
+      saveCartFoods(id, cartFoods)
+    })
   },
   computed: {
     ...mapState({
@@ -40,6 +49,7 @@ export default {
   },
   // 在退出当前商家界面
   beforeDestroy() {
+    // 在刷新界面时不会执行
     const {
       shop: { id },
       cartFoods
