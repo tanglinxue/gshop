@@ -30,6 +30,7 @@ export default {
     // this.getShopInfo()
 
     // 得到当前请求的商家id
+    console.log('我进来了')
     // const id = this.$route.params.id
     this.$store.dispatch('getShop', this.id)
     // 给窗口绑定一个卸载的监听

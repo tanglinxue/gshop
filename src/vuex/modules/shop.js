@@ -97,7 +97,10 @@ export default {
     // },
 
     async getShop({ commit, state }, id) {
+      console.log('有id')
       // 如果指定id与原有的商家Id相同，不需要发请求
+      console.log(state.shop.id)
+      console.log(id)
       if (id === state.shop.id) {
         return
       }

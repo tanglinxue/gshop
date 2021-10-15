@@ -101,7 +101,6 @@ export default {
     }
   },
   mounted() {
-    console.log('我来了')
     // 如果数据已经有了，直接做初始化的操作
     if (this.goods.length) {
       console.log('watch goods1')
